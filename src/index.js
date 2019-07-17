@@ -52,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     else if (e.target.value === "Submit") {
       const commentBox = e.target.previousSibling.previousSibling
       comments.innerHTML += `<li> ${commentBox.value} </li>`
+      commentBox.value = ""
       
       // Step 5 - Comment Feature (Backend)
       fetch(commentsURL, {
@@ -62,13 +63,9 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         body: JSON.stringify({
             image_id: imageId,
-            content: commentBox.value
+            content: comments.lastChild.innerText
           })
       })
-      // Part of Step 4 (clear box on frontend after submit)
-      commentBox.value = ""
     }
-
-
   })
 })
