@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     title.innerText = image.name
     likes.innerText = image.like_count
     image.comments.forEach(function(c) {
-      comments.innerHTML += `<li> ${c.content} </li>`
+      comments.innerHTML += "<li id: `${c.id}`> ${c.content} <button id='delete_button'>X</button> </li>"
     })
   })
 
@@ -51,12 +51,26 @@ document.addEventListener('DOMContentLoaded', () => {
     // Step 4 - Comment Feature (Frontend)
     else if (e.target.value === "Submit") {
       const commentBox = e.target.previousSibling.previousSibling
-      comments.innerHTML += `<li> ${commentBox.value} </li>`
+      comments.innerHTML += `<li> ${commentBox.value} <button id="delete_button">X</button> </li>`
       commentBox.value = ""
       
       // Step 5 - Comment Feature (Backend)
       fetch(commentsURL, {
         method: "POST",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            image_id: imageId,
+            content: comments.lastChild.innerText
+          })
+      })
+    }
+    else if (e.target.id === "delete_button") {
+      console.log(e.target.parentElement[data-id])
+      fetch(`commentsURL`, {
+        method: "DELETE",
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
